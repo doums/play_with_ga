@@ -1,0 +1,38 @@
+name: Deployment
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  gh-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Release
+        uses: softprops/action-gh-release@v1
+
+  aur-packaging:
+    needs:
+      - gh-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: robinraju/release-downloader@v1.7
+        with:
+          tag: ${{ github.ref_name }}
+          tarBall: true
+      - name: Generate PKGBUILD
+        env:
+          PKG_NAME: apekey
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: ./.ci/aur/update_pkgbuild.sh
+      # - name: Publish AUR package
+      #   uses: KSXGitHub/github-actions-deploy-aur@v2.6.0
+      #   with:
+      #     pkgname: apekey
+      #     pkgbuild: ./ci/aur/PKGBUILD
+      #     commit_username: ${{ secrets.AUR_USERNAME }}
+      #     commit_email: ${{ secrets.AUR_EMAIL }}
+      #     ssh_private_key: ${{ secrets.AUR_SSH_HEY }}
+      #     commit_message: ${{ github.ref_name }}
