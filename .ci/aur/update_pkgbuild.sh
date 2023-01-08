@@ -2,6 +2,8 @@
 
 set -e
 
+ls -la
+
 pkgver="${RELEASE_TAG#v}"
 pkgbuild=.ci/aur/PKGBUILD
 
