@@ -31,6 +31,8 @@ jobs:
           PKG_NAME: play_with_ga
           RELEASE_TAG: ${{ github.ref_name }}
         run: ./.ci/aur/update_pkgbuild.sh
+      - name: cat PKGBUILD
+        run: cat ./.ci/aur/PKGBUILD
       # - name: Publish AUR package
       #   uses: KSXGitHub/github-actions-deploy-aur@v2.6.0
       #   with:
