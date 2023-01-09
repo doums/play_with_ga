@@ -11,7 +11,7 @@ pkgbuild=.ci/aur/PKGBUILD
 sed -i "s/pkgver=.*/pkgver=$pkgver/" $pkgbuild
 
 # generate the new checksum
-sum=$(sha256sum "$PKG_NAME-$pkgver".tar.gz)
+sum=$(sha256sum "$PKG_NAME-v$pkgver".tar.gz | awk '{print $1}')
 echo "$sum"
 sed -i "s/sha256sums=('.*')/sha256sums=('.$sum')/" $pkgbuild
 
