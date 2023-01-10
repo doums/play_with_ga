@@ -24,6 +24,8 @@ fi
 
 pkgver="${RELEASE_TAG#v}"
 
+curl -Lo "$PKG_NAME-v$pkgver".tar.gz "https://github.com/doums/apekey/archive/refs/tags/$RELEASE_TAG.tar.gz"
+
 if ! [ -a "$PKG_NAME-v$pkgver".tar.gz ]; then
   >&2 printf "  %b%b✕%b no such file $PKG_NAME-v$pkgver.tar.gz\n" "$red" "$bold" "$reset"
   exit 1
