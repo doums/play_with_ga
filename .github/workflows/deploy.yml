@@ -1,44 +1,31 @@
-name: Deployment
+name: Play with GH actions
 
 on:
   push:
-    tags:
-      - v*
-  pull_request:
 
 jobs:
-  gh-release:
+  test:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Release
-        uses: softprops/action-gh-release@v1
-
-  aur-packaging:
-    needs:
-      - gh-release
-    runs-on: ubuntu-latest
+    env:
+      PKG_NAME: apekey
+      PKGBUILD: ./.pkg/aur/PKGBUILD
+      RELEASE_TAG: v0.1.2
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - uses: robinraju/release-downloader@v1.7
         with:
-          tag: ${{ github.ref_name }}
+          repository: "doums/apekey"
+          tag: v0.1.2
           tarBall: true
-      - name: Generate PKGBUILD
-        env:
-          PKG_NAME: play_with_ga
-          RELEASE_TAG: ${{ github.ref_name }}
-        run: ./.ci/aur/update_pkgbuild.sh
-      - name: cat PKGBUILD
-        run: cat ./.ci/aur/PKGBUILD
-      # - name: Publish AUR package
-      #   uses: KSXGitHub/github-actions-deploy-aur@v2.6.0
-      #   with:
-      #     pkgname: apekey
-      #     pkgbuild: ./ci/aur/PKGBUILD
-      #     commit_username: ${{ secrets.AUR_USERNAME }}
-      #     commit_email: ${{ secrets.AUR_EMAIL }}
-      #     ssh_private_key: ${{ secrets.AUR_SSH_HEY }}
-      #     commit_message: ${{ github.ref_name }}
+
+      - name: install makepkg
+        run: apt-get install -y makepkg && makepkg --version
+      - name: WIP
+        run: ls -la
+      - name: WIP
+        run: sha256sum --version
+      - name: WIP
+        run: sha256sum apekey-v0.1.2.tar.gz
+      - name: Update PKGBUILD
+        run: ./.pkg/aur/update_pkgbuild.sh
