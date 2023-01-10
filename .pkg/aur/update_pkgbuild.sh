@@ -7,11 +7,6 @@ green="\e[38;5;2m"
 bold="\e[1m"
 reset="\e[0m"
 
-if [ -z "$PKGBUILD" ]; then
-  >&2 printf "  %b%b✕%b PKGBUILD not set\n" "$red" "$bold" "$reset"
-  exit 1
-fi
-
 if [ -z "$PKG_NAME" ]; then
   >&2 printf "  %b%b✕%b PKG_NAME not set\n" "$red" "$bold" "$reset"
   exit 1
@@ -19,11 +14,6 @@ fi
 
 if [ -z "$RELEASE_TAG" ]; then
   >&2 printf "  %b%b✕%b RELEASE_TAG not set\n" "$red" "$bold" "$reset"
-  exit 1
-fi
-
-if ! [ -a "$PKGBUILD" ]; then
-  >&2 printf "  %b%b✕%b no such file $PKGBUILD\n" "$red" "$bold" "$reset"
   exit 1
 fi
 
