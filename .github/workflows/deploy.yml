@@ -19,8 +19,6 @@ jobs:
           tag: v0.1.2
           tarBall: true
 
-      - name: install makepkg
-        run: sudo apt-get install -y makepkg && makepkg --version
       - name: WIP
         run: ls -la
       - name: WIP

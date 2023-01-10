@@ -44,7 +44,6 @@ printf "  %b%b✓%b bump version to $RELEASE_TAG\n" "$green" "$bold" "$reset"
 
 # generate new checksum
 sha256sum "$PKG_NAME-v$pkgver".tar.gz
-makepkg -g
 sum=$(set -o pipefail && sha256sum "$PKG_NAME-v$pkgver".tar.gz | awk '{print $1}')
 printf "  %b%b✓%b generated checksum $sum\n" "$green" "$bold" "$reset"
 
