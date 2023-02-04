@@ -6,14 +6,21 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      PKG_NAME: apekey
-      PKGBUILD: ./.pkg/aur/PKGBUILD
-      RELEASE_TAG: v0.1.2
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: WIP
-        run: ls -la
-      - name: Update PKGBUILD
-        run: ./.pkg/aur/update_pkgbuild.sh
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: stable
+          # components: clippy
+
+      - name: dump
+        run: |
+          echo ___________________________________________________________________________________________________________
+          echo $HOME
+          echo $GITHUB_WORKSPACE
+          echo ${{ github.workspace }}
+          echo $CARGO_HOME
+          ls -la $HOME/.cargo/bin
+          ls -la $GITHUB_WORKSPACE
+          ls -la ${{ github.workspace }}
