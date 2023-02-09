@@ -1,26 +1,56 @@
-name: Play with GH actions
+name: 🚧
 
 on:
   push:
 
 jobs:
-  test:
+  build:
+    name: Build APK
     runs-on: ubuntu-latest
+    env:
+      ANDROID_HOME: ${{ github.workspace }}/android-sdk
+      NDK_VERSION: 25.1.8937393
+      NDK_HOME: ${{ github.workspace }}/android-sdk/ndk/25.1.8937393
+      SDK_PLATFORM_VERSION: android-33
+      SDK_BUILDTOOLS_VERSION: 33.0.1
 
     steps:
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@master
+      - name: Install Java
+        uses: actions/setup-java@v3
         with:
-          toolchain: stable
-          # components: clippy
+          distribution: "temurin"
+          java-version: "17"
 
       - name: dump
         run: |
           echo ___________________________________________________________________________________________________________
-          echo $HOME
+          echo $ANDROID_HOME
           echo $GITHUB_WORKSPACE
           echo ${{ github.workspace }}
-          echo $CARGO_HOME
-          ls -la $HOME/.cargo/bin
-          ls -la $GITHUB_WORKSPACE
           ls -la ${{ github.workspace }}
+
+      - name: Install Android SDK manager
+        # https://developer.android.com/studio/command-line/sdkmanager
+        run: |
+          curl -sS https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -o cmdline-tools.zip
+          unzip cmdline-tools.zip
+          mkdir -p $ANDROID_HOME/cmdline-tools/latest
+          mv cmdline-tools/* $ANDROID_HOME/cmdline-tools/latest
+          rm -rf cmdline-tools
+
+      - name: Install Android S/NDK
+        run: |
+          echo y | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+          echo y | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+            "platforms;$SDK_PLATFORM_VERSION" \
+            "platform-tools" \
+            "ndk;$NDK_VERSION" \
+            "build-tools;$SDK_BUILDTOOLS_VERSION"
+
+      - name: dump
+        run: |
+          echo ___________________________________________________________________________________________________________
+          echo $ANDROID_HOME
+          echo ${{ github.workspace }}
+          ls -la ${{ github.workspace }}
+          ls -la $ANDROID_HOME
